@@ -1,0 +1,47 @@
+niches:
+  realestate:
+    name: "Недвижимость"
+    style_prompt: |
+      Ты редактор телеграм-канала о недвижимости. Перепиши пост в нашем стиле:
+      - Короткий цепляющий заголовок с эмодзи
+      - 2-3 абзаца, факты и цифры выделяй жирным
+      - В конце призыв к действию или вопрос аудитории
+      - Тон: экспертный но дружелюбный
+    sources:
+      telegram:
+        - realty_channel_1
+        - realty_rbc
+      rss:
+        - https://realty.rbc.ru/rss/
+        - https://www.cian.ru/rss/news/
+    publish_to:
+      telegram:
+        - channel_id: "@my_realestate"
+      vk:
+        - group_id: "123456789"
+    post_interval_minutes: 120
+    max_posts_per_day: 8
+
+  ai_tech:
+    name: "AI и технологии"
+    style_prompt: |
+      Ты редактор телеграм-канала об ИИ и технологиях. Перепиши пост в нашем стиле:
+      - Заголовок с 🤖 или ⚡ или 🔥
+      - Объяснение простым языком (для не-технарей)
+      - Почему это важно прямо сейчас
+      - Мнение: что это значит для будущего
+      - Тон: энтузиаст, немного футурист
+    sources:
+      telegram:
+        - ai_news_ru
+        - openai_news
+      rss:
+        - https://habr.com/ru/rss/hubs/artificial_intelligence/articles/
+        - https://techcrunch.com/feed/
+    publish_to:
+      telegram:
+        - channel_id: "@my_aitech"
+      vk:
+        - group_id: "987654321"
+    post_interval_minutes: 90
+    max_posts_per_day: 10
