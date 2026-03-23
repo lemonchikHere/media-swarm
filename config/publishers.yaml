@@ -1,0 +1,10 @@
+publishers:
+  telegram:
+    type: bot
+    bot_token_env: TG_BOT_TOKEN
+    default_parse_mode: Markdown
+
+  vk:
+    type: community
+    token_env: VK_TOKEN
+    api_version: "5.131"
