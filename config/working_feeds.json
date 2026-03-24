@@ -1,0 +1,154 @@
+{
+  "generated": "2026-03-24T09:35:02.085746",
+  "results": {
+    "realestate": [
+      {
+        "url": "https://realty.rbc.ru/rss/",
+        "status": "FAIL",
+        "entries": 0,
+        "title": "No entries",
+        "feed_title": "Unknown"
+      },
+      {
+        "url": "https://www.cian.ru/rss/",
+        "status": "FAIL",
+        "entries": 0,
+        "title": "No entries",
+        "feed_title": "Unknown"
+      },
+      {
+        "url": "https://www.bn.ru/rss/",
+        "status": "FAIL",
+        "entries": 0,
+        "title": "No entries",
+        "feed_title": "Unknown"
+      },
+      {
+        "url": "https://www.irn.ru/rss/",
+        "status": "FAIL",
+        "entries": 0,
+        "title": "No entries",
+        "feed_title": "Unknown"
+      },
+      {
+        "url": "https://novostroev.ru/rss/",
+        "status": "FAIL",
+        "entries": 0,
+        "title": "No entries",
+        "feed_title": "Unknown"
+      },
+      {
+        "url": "https://metrium.ru/news/rss/",
+        "status": "FAIL",
+        "entries": 0,
+        "title": "No entries",
+        "feed_title": "Unknown"
+      },
+      {
+        "url": "https://realsearch.ru/rss/",
+        "status": "FAIL",
+        "entries": 0,
+        "title": "No entries",
+        "feed_title": "Unknown"
+      }
+    ],
+    "ai_tech_ru": [
+      {
+        "url": "https://habr.com/ru/rss/hubs/artificial_intelligence/articles/",
+        "status": "OK",
+        "entries": 40,
+        "title": "Как установить DeepSeek на сервере: практическое руководство",
+        "feed_title": "Все статьи подряд / Искусственный интеллект / Хабр"
+      },
+      {
+        "url": "https://3dnews.ru/rss/all.xml",
+        "status": "FAIL",
+        "entries": 0,
+        "title": "No entries",
+        "feed_title": "Unknown"
+      },
+      {
+        "url": "https://cnews.ru/inc/rss/news.xml",
+        "status": "OK",
+        "entries": 200,
+        "title": "Российские ученые научили квантовые компьютеры эффективнее у",
+        "feed_title": "CNews.ru"
+      }
+    ],
+    "ai_tech_west": [
+      {
+        "url": "https://feeds.feedburner.com/venturebeat/SZYF",
+        "status": "OK",
+        "entries": 7,
+        "title": "What is DeerFlow 2.0 and what should enterprises know about ",
+        "feed_title": "VentureBeat"
+      },
+      {
+        "url": "https://techcrunch.com/feed/",
+        "status": "OK",
+        "entries": 20,
+        "title": "Delve halts demos, Insight Partners scrubs investment post a",
+        "feed_title": "TechCrunch"
+      },
+      {
+        "url": "https://www.technologyreview.com/feed/",
+        "status": "OK",
+        "entries": 10,
+        "title": "The hardest question to answer about AI-fueled delusions",
+        "feed_title": "MIT Technology Review"
+      },
+      {
+        "url": "https://www.theverge.com/rss/index.xml",
+        "status": "OK",
+        "entries": 10,
+        "title": "The US government just banned consumer routers made outside ",
+        "feed_title": "The Verge"
+      },
+      {
+        "url": "https://feeds.arstechnica.com/arstechnica/index",
+        "status": "OK",
+        "entries": 20,
+        "title": "A mission NASA might kill is still returning fascinating sci",
+        "feed_title": "Ars Technica - All content"
+      },
+      {
+        "url": "https://openai.com/news/rss.xml",
+        "status": "OK",
+        "entries": 892,
+        "title": "Creating with Sora Safely",
+        "feed_title": "OpenAI News"
+      },
+      {
+        "url": "https://www.artificialintelligence-news.com/feed/",
+        "status": "OK",
+        "entries": 12,
+        "title": "Palantir AI to support UK finance operations",
+        "feed_title": "AI News"
+      },
+      {
+        "url": "https://syncedreview.com/feed/",
+        "status": "OK",
+        "entries": 10,
+        "title": "Which Agent Causes Task Failures and When?Researchers from P",
+        "feed_title": "Synced"
+      }
+    ]
+  },
+  "working": {
+    "realestate": [],
+    "ai_tech_ru": [
+      "https://habr.com/ru/rss/hubs/artificial_intelligence/articles/",
+      "https://cnews.ru/inc/rss/news.xml"
+    ],
+    "ai_tech_west": [
+      "https://feeds.feedburner.com/venturebeat/SZYF",
+      "https://techcrunch.com/feed/",
+      "https://www.technologyreview.com/feed/",
+      "https://www.theverge.com/rss/index.xml",
+      "https://feeds.arstechnica.com/arstechnica/index",
+      "https://openai.com/news/rss.xml",
+      "https://www.artificialintelligence-news.com/feed/",
+      "https://syncedreview.com/feed/"
+    ]
+  }
+}
