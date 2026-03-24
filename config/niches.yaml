@@ -56,3 +56,78 @@ niches:
         - group_id: "987654321"         # TODO: replace with real group
     post_interval_minutes: 90
     max_posts_per_day: 10
+
+  github_trending:
+    name: "GitHub сегодня"
+    persona: "github_trending_ru"
+    style_prompt: ""  # loaded from personas/authors.yaml
+    sources:
+      rss:
+        - https://mshibanami.github.io/GitHubTrendingRSS/daily/all.xml
+        - https://mshibanami.github.io/GitHubTrendingRSS/daily/python.xml
+    publish_to:
+      telegram:
+        - channel_id: "@github_trending_ru"
+    post_interval_minutes: 480
+    max_posts_per_day: 3
+
+  vibecoding:
+    name: "Вайбкодинг"
+    persona: "vibecoding_ru"
+    style_prompt: ""
+    sources:
+      rss:
+        - https://www.reddit.com/r/cursor_ide/top/.rss?t=day
+        - https://www.reddit.com/r/ClaudeAI/top/.rss?t=day
+        - https://www.reddit.com/r/vibecoding/top/.rss?t=week
+        - https://changelog.cursor.com/rss.xml
+    publish_to:
+      telegram:
+        - channel_id: "@vibecoding_ru"
+    post_interval_minutes: 360
+    max_posts_per_day: 4
+
+  ai_money:
+    name: "ИИ зарабатывает"
+    persona: "ai_money_ru"
+    style_prompt: ""
+    sources:
+      rss:
+        - https://www.indiehackers.com/feed.rss
+        - https://feeds.feedburner.com/venturebeat/SZYF
+        - https://techcrunch.com/category/startups/feed/
+    publish_to:
+      telegram:
+        - channel_id: "@ai_money_ru"
+    post_interval_minutes: 480
+    max_posts_per_day: 3
+
+  ai_startups:
+    name: "AI Стартапы"
+    persona: "ai_startups_ru"
+    style_prompt: ""
+    sources:
+      rss:
+        - https://techcrunch.com/category/artificial-intelligence/feed/
+        - https://feeds.feedburner.com/venturebeat/SZYF
+        - https://www.producthunt.com/feed
+    publish_to:
+      telegram:
+        - channel_id: "@ai_startups_ru"
+    post_interval_minutes: 360
+    max_posts_per_day: 4
+
+  nocode:
+    name: "Строй без кода"
+    persona: "nocode_build_ru"
+    style_prompt: ""
+    sources:
+      rss:
+        - https://www.reddit.com/r/nocode/top/.rss?t=week
+        - https://www.reddit.com/r/bubble/top/.rss?t=week
+        - https://nocodehq.com/feed/
+    publish_to:
+      telegram:
+        - channel_id: "@nocode_build_ru"
+    post_interval_minutes: 600
+    max_posts_per_day: 2

@@ -1,6 +1,6 @@
 import asyncio
 import os
-from src.config_loader import get_niche_config
+from src.config_loader import get_niche_config, get_persona
 from src.collector.rss import RSSCollector
 from src.collector.telegram import TelegramCollector
 from src.deduplicator.embeddings import SemanticDeduplicator
@@ -14,6 +14,7 @@ class Pipeline:
     def __init__(self, niche: str):
         self.niche = niche
         self.config = get_niche_config(niche)
+        self.persona = get_persona(niche)
         self.dedup = SemanticDeduplicator(
             redis_url=os.getenv("REDIS_URL", "redis://localhost:6380"),
             openai_api_key=os.environ["OPENAI_API_KEY"],
@@ -57,7 +58,7 @@ class Pipeline:
 
             platforms = list(self.config["publish_to"].keys())
             processed = await self.rewriter.rewrite(
-                post, self.config["style_prompt"], platforms
+                post, self.config["style_prompt"], platforms, self.persona
             )
 
             for platform, channels in self.config["publish_to"].items():

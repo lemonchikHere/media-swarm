@@ -38,7 +38,7 @@ def mock_collector_posts():
 
 
 def make_fake_rewrite():
-    async def fake_rewrite(post, style_prompt, platforms):
+    async def fake_rewrite(post, style_prompt, platforms, persona=None):
         return ProcessedPost(
             raw_id=post.id,
             niche=post.niche,
