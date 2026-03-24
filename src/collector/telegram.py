@@ -3,9 +3,7 @@ import hashlib
 import asyncio
 from datetime import datetime
 from typing import AsyncIterator
-from dotenv import load_dotenv
 
-load_dotenv('.env')
 
 from pyrogram import Client
 from src.models import RawPost

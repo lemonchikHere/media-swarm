@@ -22,7 +22,7 @@ class Pipeline:
         self.rss_collector = RSSCollector()
         self.tg_collector = TelegramCollector()
         self.publishers = {
-            "telegram": TelegramPublisher(os.environ["TG_BOT_TOKEN"]),
+            "telegram": TelegramPublisher(),
             "vk": VKPublisher(os.environ["VK_TOKEN"]),
         }
 

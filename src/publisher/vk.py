@@ -3,9 +3,6 @@ import vk_api
 from src.models import ProcessedPost
 from src.publisher.base import BasePublisher
 
-DRY_RUN = os.getenv("DRY_RUN", "").lower() in ("1", "true", "yes")
-
-
 class VKPublisher(BasePublisher):
     def __init__(self, token: str):
         self.vk = vk_api.VkApi(token=token)
@@ -13,7 +10,7 @@ class VKPublisher(BasePublisher):
 
     async def publish(self, post: ProcessedPost, group_id: str) -> bool:
         text = post.platform_variants.get("vk", post.body)
-        if DRY_RUN:
+        if os.getenv("DRY_RUN", "").lower() in ("1", "true", "yes"):
             print(f"[DRY_RUN][VK] → group {group_id}: {text[:120]}...")
             return True
         try:

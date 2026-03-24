@@ -1,13 +1,22 @@
 import pytest
+import os
 from unittest.mock import patch, MagicMock, AsyncMock
 from src.publisher.telegram import TelegramPublisher
 from src.models import ProcessedPost
 from datetime import datetime
 
 
+@pytest.fixture(autouse=True)
+def tg_env(monkeypatch):
+    monkeypatch.setenv("TG_API_ID", "12345")
+    monkeypatch.setenv("TG_API_HASH", "testhash")
+    monkeypatch.setenv("TG_SESSION_STRING", "teststring")
+    monkeypatch.delenv("DRY_RUN", raising=False)
+
+
 @pytest.fixture
 def publisher():
-    return TelegramPublisher(bot_token="test-bot-token")
+    return TelegramPublisher()
 
 
 @pytest.fixture
@@ -23,100 +32,73 @@ def sample_post():
 
 
 @pytest.mark.asyncio
-async def test_publish_calls_telegram_api(publisher, sample_post):
-    mock_response = MagicMock()
-    mock_response.status_code = 200
-    
-    with patch("httpx.AsyncClient") as mock_client_class:
-        mock_client = AsyncMock()
-        mock_client.post.return_value = mock_response
-        mock_client_class.return_value.__aenter__.return_value = mock_client
-        
-        result = await publisher.publish(sample_post, "@my_channel")
-        
-        assert result is True
-        mock_client.post.assert_called_once()
+async def test_publish_calls_send_message(publisher, sample_post):
+    mock_app = AsyncMock()
+    mock_app.__aenter__ = AsyncMock(return_value=mock_app)
+    mock_app.__aexit__ = AsyncMock(return_value=None)
+    mock_app.send_message = AsyncMock()
+
+    with patch("src.publisher.telegram.Client", return_value=mock_app):
+        result = await publisher.publish(sample_post, "@test_channel")
+
+    assert result is True
+    mock_app.send_message.assert_called_once_with("@test_channel", "**TG Test**\n\nTG body")
 
 
 @pytest.mark.asyncio
-async def test_publish_sends_correct_payload(publisher, sample_post):
-    mock_response = MagicMock()
-    mock_response.status_code = 200
-    
-    with patch("httpx.AsyncClient") as mock_client_class:
-        mock_client = AsyncMock()
-        mock_client.post.return_value = mock_response
-        mock_client_class.return_value.__aenter__.return_value = mock_client
-        
-        await publisher.publish(sample_post, "@my_realestate")
-        
-        call_kwargs = mock_client.post.call_args[1]["json"]
-        assert call_kwargs["chat_id"] == "@my_realestate"
-        assert call_kwargs["text"] == "**TG Test**\n\nTG body"
-        assert call_kwargs["parse_mode"] == "Markdown"
-
-
-@pytest.mark.asyncio
-async def test_publish_returns_false_on_error(publisher, sample_post):
-    mock_response = MagicMock()
-    mock_response.status_code = 500
-    
-    with patch("httpx.AsyncClient") as mock_client_class:
-        mock_client = AsyncMock()
-        mock_client.post.return_value = mock_response
-        mock_client_class.return_value.__aenter__.return_value = mock_client
-        
-        result = await publisher.publish(sample_post, "@my_channel")
-        
-        assert result is False
-
-
-@pytest.mark.asyncio
-async def test_publish_uses_fallback_body(publisher, sample_post):
-    post_without_telegram = ProcessedPost(
+async def test_publish_uses_fallback_body(publisher):
+    post = ProcessedPost(
         raw_id="post-456",
-        niche="realestate",
+        niche="ai_tech",
         title="Test",
-        body="Fallback body",
-        platform_variants={"vk": "VK only"},
+        body="Fallback body content here",
+        platform_variants={},
         created_at=datetime.utcnow(),
     )
-    
-    mock_response = MagicMock()
-    mock_response.status_code = 200
-    
-    with patch("httpx.AsyncClient") as mock_client_class:
-        mock_client = AsyncMock()
-        mock_client.post.return_value = mock_response
-        mock_client_class.return_value.__aenter__.return_value = mock_client
-        
-        await publisher.publish(post_without_telegram, "@my_channel")
-        
-        call_kwargs = mock_client.post.call_args[1]["json"]
-        assert call_kwargs["text"] == "Fallback body"
+    mock_app = AsyncMock()
+    mock_app.__aenter__ = AsyncMock(return_value=mock_app)
+    mock_app.__aexit__ = AsyncMock(return_value=None)
+    mock_app.send_message = AsyncMock()
+
+    with patch("src.publisher.telegram.Client", return_value=mock_app):
+        result = await publisher.publish(post, "@test_channel")
+
+    assert result is True
+    mock_app.send_message.assert_called_once_with("@test_channel", "Fallback body content here")
 
 
 @pytest.mark.asyncio
 async def test_publish_truncates_long_text(publisher, sample_post):
-    long_text = "A" * 5000
-    post_long = ProcessedPost(
-        raw_id="post-789",
-        niche="realestate",
-        title="Long",
-        body=long_text,
-        platform_variants={"telegram": long_text},
-        created_at=datetime.utcnow(),
-    )
-    
-    mock_response = MagicMock()
-    mock_response.status_code = 200
-    
-    with patch("httpx.AsyncClient") as mock_client_class:
-        mock_client = AsyncMock()
-        mock_client.post.return_value = mock_response
-        mock_client_class.return_value.__aenter__.return_value = mock_client
-        
-        await publisher.publish(post_long, "@my_channel")
-        
-        call_kwargs = mock_client.post.call_args[1]["json"]
-        assert len(call_kwargs["text"]) <= 4096
+    sample_post.platform_variants["telegram"] = "A" * 5000
+    mock_app = AsyncMock()
+    mock_app.__aenter__ = AsyncMock(return_value=mock_app)
+    mock_app.__aexit__ = AsyncMock(return_value=None)
+    mock_app.send_message = AsyncMock()
+
+    with patch("src.publisher.telegram.Client", return_value=mock_app):
+        await publisher.publish(sample_post, "@test_channel")
+
+    sent_text = mock_app.send_message.call_args[0][1]
+    assert len(sent_text) <= 4096
+
+
+@pytest.mark.asyncio
+async def test_publish_returns_false_on_error(publisher, sample_post):
+    mock_app = AsyncMock()
+    mock_app.__aenter__ = AsyncMock(return_value=mock_app)
+    mock_app.__aexit__ = AsyncMock(return_value=None)
+    mock_app.send_message = AsyncMock(side_effect=Exception("Connection error"))
+
+    with patch("src.publisher.telegram.Client", return_value=mock_app):
+        result = await publisher.publish(sample_post, "@test_channel")
+
+    assert result is False
+
+
+@pytest.mark.asyncio
+async def test_dry_run_skips_publish(publisher, sample_post, monkeypatch):
+    monkeypatch.setenv("DRY_RUN", "true")
+    with patch("src.publisher.telegram.Client") as mock_client:
+        result = await publisher.publish(sample_post, "@test_channel")
+    assert result is True
+    mock_client.assert_not_called()
