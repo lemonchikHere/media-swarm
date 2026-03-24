@@ -8,19 +8,18 @@ niches:
       - В конце призыв к действию или вопрос аудитории
       - Тон: экспертный но дружелюбный
     sources:
-      telegram:
-        - domclick          # 179k subscribers — Домклик
-        - realty_rbc        # 45k — РБК Недвижимость
-        - cian_official     # 22k — Циан
-        - irn_ru            # 1.1k — IRN.ru аналитика
       rss:
-        - https://www.mirkvartir.ru/rss/news/       # MirKvartir — 60 entries ✅
-        - https://www.vedomosti.ru/rss/articles     # Ведомости — 200 entries ✅
+        # Telegram каналы через tg.i-c-a.su (публичный RSS-прокси)
+        - https://tg.i-c-a.su/rss/domclick          # Домклик — 179k
+        - https://tg.i-c-a.su/rss/realty_rbc        # РБК Недвижимость — 45k
+        - https://tg.i-c-a.su/rss/cian_official     # Циан — 22k
+        - https://tg.i-c-a.su/rss/irn_ru            # IRN.ru аналитика
+        # Новостные RSS
+        - https://www.mirkvartir.ru/rss/news/
+        - https://www.vedomosti.ru/rss/articles
     publish_to:
       telegram:
-        - channel_id: "@metry_dengi"   
-      vk:
-        - group_id: "123456789"           # TODO: replace with real group
+        - channel_id: "@metry_dengi"
     post_interval_minutes: 120
     max_posts_per_day: 8
 
@@ -34,37 +33,35 @@ niches:
       - Мнение: что это значит для будущего
       - Тон: энтузиаст, немного футурист
     sources:
-      telegram:
-        - ai_machinelearning_big_data   # 323k — Machinelearning
-        - opendatascience               # 41k — ODS.ai Data Science
-        - machinelearning_ru            # 18k — ML RU
-        - deeplearning_ru               # 3.5k — Deep Learning / GenAI
       rss:
-        # Russian
-        - https://habr.com/ru/rss/hubs/artificial_intelligence/articles/  # ✅
-        - https://cnews.ru/inc/rss/news.xml                               # ✅
-        # Western (all verified working)
-        - https://feeds.feedburner.com/venturebeat/SZYF                   # VentureBeat ✅
-        - https://techcrunch.com/feed/                                     # TechCrunch ✅
-        - https://www.technologyreview.com/feed/                           # MIT Tech Review ✅
-        - https://feeds.arstechnica.com/arstechnica/index                  # Ars Technica ✅
-        - https://openai.com/news/rss.xml                                  # OpenAI Blog ✅
+        # Telegram каналы через tg.i-c-a.su
+        - https://tg.i-c-a.su/rss/ai_machinelearning_big_data  # 323k
+        - https://tg.i-c-a.su/rss/opendatascience              # 41k ODS.ai
+        - https://tg.i-c-a.su/rss/machinelearning_ru           # 18k ML RU
+        - https://tg.i-c-a.su/rss/deeplearning_ru              # 3.5k GenAI
+        # Западные новостные RSS
+        - https://habr.com/ru/rss/hubs/artificial_intelligence/articles/
+        - https://cnews.ru/inc/rss/news.xml
+        - https://feeds.feedburner.com/venturebeat/SZYF
+        - https://techcrunch.com/feed/
+        - https://www.technologyreview.com/feed/
+        - https://feeds.arstechnica.com/arstechnica/index
+        - https://openai.com/news/rss.xml
     publish_to:
       telegram:
-        - channel_id: "@ai_puls_ru"     
-      vk:
-        - group_id: "987654321"         # TODO: replace with real group
+        - channel_id: "@ai_puls_ru"
     post_interval_minutes: 90
     max_posts_per_day: 10
 
   github_trending:
     name: "GitHub сегодня"
     persona: "github_trending_ru"
-    style_prompt: ""  # loaded from personas/authors.yaml
+    style_prompt: ""
     sources:
       rss:
         - https://mshibanami.github.io/GitHubTrendingRSS/daily/all.xml
         - https://mshibanami.github.io/GitHubTrendingRSS/daily/python.xml
+        - https://mshibanami.github.io/GitHubTrendingRSS/daily/typescript.xml
     publish_to:
       telegram:
         - channel_id: "@github_trending_ru"
@@ -81,9 +78,12 @@ niches:
         - https://www.reddit.com/r/ClaudeAI/top/.rss?t=day
         - https://www.reddit.com/r/vibecoding/top/.rss?t=week
         - https://changelog.cursor.com/rss.xml
+        # Telegram каналы по теме
+        - https://tg.i-c-a.su/rss/cursor_ai_news
+        - https://tg.i-c-a.su/rss/ai_machinelearning_big_data
     publish_to:
       telegram:
-        - channel_id: "@vibecoding_ru"
+        - channel_id: "@vibedev_ru"
     post_interval_minutes: 360
     max_posts_per_day: 4
 
@@ -96,9 +96,10 @@ niches:
         - https://www.indiehackers.com/feed.rss
         - https://feeds.feedburner.com/venturebeat/SZYF
         - https://techcrunch.com/category/startups/feed/
+        - https://tg.i-c-a.su/rss/ai_machinelearning_big_data
     publish_to:
       telegram:
-        - channel_id: "@ai_money_ru"
+        - channel_id: "@ai_zarabot"
     post_interval_minutes: 480
     max_posts_per_day: 3
 
@@ -111,9 +112,11 @@ niches:
         - https://techcrunch.com/category/artificial-intelligence/feed/
         - https://feeds.feedburner.com/venturebeat/SZYF
         - https://www.producthunt.com/feed
+        - https://tg.i-c-a.su/rss/ai_machinelearning_big_data
+        - https://tg.i-c-a.su/rss/opendatascience
     publish_to:
       telegram:
-        - channel_id: "@ai_startups_ru"
+        - channel_id: "@ai_rounds"
     post_interval_minutes: 360
     max_posts_per_day: 4
 
@@ -128,6 +131,6 @@ niches:
         - https://nocodehq.com/feed/
     publish_to:
       telegram:
-        - channel_id: "@nocode_build_ru"
+        - channel_id: "@bezcode_ru"
     post_interval_minutes: 600
     max_posts_per_day: 2
