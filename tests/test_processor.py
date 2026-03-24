@@ -80,3 +80,48 @@ def test_platform_hint_unknown():
     rewriter = AIRewriter("test-key")
     hint = rewriter._platform_hint("unknown")
     assert hint == "unknown"
+
+
+@pytest.mark.asyncio
+async def test_rewrite_uses_persona_model(rewriter, sample_post):
+    mock_response = MagicMock()
+    mock_response.choices = [MagicMock(message=MagicMock(content="Test content"))]
+    
+    persona = {"model": "gpt-4o", "humanize": False}
+    
+    with patch.object(rewriter.client.chat.completions, "create", new_callable=AsyncMock) as mock_create:
+        mock_create.return_value = mock_response
+        await rewriter.rewrite(sample_post, "style prompt", ["telegram"], persona)
+        
+        call_kwargs = mock_create.call_args.kwargs
+        assert call_kwargs["model"] == "gpt-4o"
+
+
+@pytest.mark.asyncio
+async def test_rewrite_with_persona_humanize(rewriter, sample_post):
+    mock_response = MagicMock()
+    mock_response.choices = [MagicMock(message=MagicMock(content="Humanized content"))]
+    
+    persona = {"model": "gpt-4o-mini", "humanize": True, "system_prompt": "You are a writer."}
+    
+    with patch.object(rewriter.client.chat.completions, "create", new_callable=AsyncMock) as mock_create:
+        mock_create.return_value = mock_response
+        result = await rewriter.rewrite(sample_post, "", ["telegram"], persona)
+        
+        assert mock_create.call_count == 2
+
+
+@pytest.mark.asyncio
+async def test_rewrite_uses_persona_system_prompt(rewriter, sample_post):
+    mock_response = MagicMock()
+    mock_response.choices = [MagicMock(message=MagicMock(content="Content"))]
+    
+    persona_system_prompt = "You are a developer advocate."
+    
+    with patch.object(rewriter.client.chat.completions, "create", new_callable=AsyncMock) as mock_create:
+        mock_create.return_value = mock_response
+        await rewriter.rewrite(sample_post, "", ["telegram"], {"system_prompt": persona_system_prompt})
+        
+        call_kwargs = mock_create.call_args.kwargs
+        messages = call_kwargs["messages"]
+        assert persona_system_prompt in messages[0]["content"]

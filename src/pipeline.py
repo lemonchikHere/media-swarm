@@ -1,6 +1,6 @@
 import asyncio
 import os
-from src.config_loader import get_niche_config
+from src.config_loader import get_niche_config, get_persona
 from src.collector.rss import RSSCollector
 from src.collector.telegram import TelegramCollector
 from src.deduplicator.embeddings import SemanticDeduplicator
@@ -56,8 +56,9 @@ class Pipeline:
                 continue
 
             platforms = list(self.config["publish_to"].keys())
+            persona = self.config.get("_persona")
             processed = await self.rewriter.rewrite(
-                post, self.config["style_prompt"], platforms
+                post, self.config["style_prompt"], platforms, persona
             )
 
             for platform, channels in self.config["publish_to"].items():

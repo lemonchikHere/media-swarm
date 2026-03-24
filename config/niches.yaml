@@ -56,3 +56,70 @@ niches:
         - group_id: "987654321"         # TODO: replace with real group
     post_interval_minutes: 90
     max_posts_per_day: 10
+
+  github_trending:
+    name: "GitHub Тренды"
+    style_prompt: ""
+    persona: github_trending_ru
+    sources:
+      rss:
+        - https://github.com/trending/rss?since=weekly&spoken_language_code=
+    publish_to:
+      telegram:
+        - channel_id: "@metry_dengi"
+    post_interval_minutes: 180
+    max_posts_per_day: 4
+
+  vibecoding:
+    name: "Vibe Coding"
+    style_prompt: ""
+    persona: vibecoding_ru
+    sources:
+      rss:
+        - https://news.ycombinator.com/rss
+    publish_to:
+      telegram:
+        - channel_id: "@metry_dengi"
+    post_interval_minutes: 120
+    max_posts_per_day: 6
+
+  ai_money:
+    name: "AI + Деньги"
+    style_prompt: ""
+    persona: ai_money_ru
+    sources:
+      rss:
+        - https://www.sequoia.com/feed/
+        - https://a16z.com/feed/
+    publish_to:
+      telegram:
+        - channel_id: "@metry_dengi"
+    post_interval_minutes: 240
+    max_posts_per_day: 3
+
+  ai_startups:
+    name: "AI Стартапы"
+    style_prompt: ""
+    persona: ai_startups_ru
+    sources:
+      rss:
+        - https://techcrunch.com/category/artificial-intelligence/feed/
+        - https://www.theverge.com/rss/ai/index.xml
+    publish_to:
+      telegram:
+        - channel_id: "@metry_dengi"
+    post_interval_minutes: 180
+    max_posts_per_day: 4
+
+  nocode:
+    name: "No-Code Tools"
+    style_prompt: ""
+    persona: nocode_build_ru
+    sources:
+      rss:
+        - https://www.producthunt.com/feed/categories/nocode.rss
+    publish_to:
+      telegram:
+        - channel_id: "@metry_dengi"
+    post_interval_minutes: 240
+    max_posts_per_day: 3

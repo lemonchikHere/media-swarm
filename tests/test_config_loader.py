@@ -1,5 +1,5 @@
 import pytest
-from src.config_loader import load_niches, get_niche_config, load_publishers
+from src.config_loader import load_niches, get_niche_config, load_publishers, load_personas, get_persona
 
 
 def test_load_niches_returns_dict():
@@ -37,3 +37,28 @@ def test_load_publishers():
     assert "vk" in publishers
     assert publishers["telegram"]["type"] == "bot"
     assert publishers["vk"]["type"] == "community"
+
+
+def test_load_personas_returns_dict():
+    personas = load_personas()
+    assert isinstance(personas, dict)
+    assert "github_trending_ru" in personas
+
+
+def test_get_persona_returns_correct_persona():
+    persona = get_persona("github_trending_ru")
+    assert "system_prompt" in persona
+    assert "model" in persona
+
+
+def test_get_persona_unknown_raises():
+    with pytest.raises(ValueError, match="Unknown persona"):
+        get_persona("unknown_persona")
+
+
+def test_get_niche_config_loads_persona_style_prompt():
+    cfg = get_niche_config("github_trending")
+    assert cfg["persona"] == "github_trending_ru"
+    assert "_persona" in cfg
+    assert "system_prompt" in cfg["_persona"]
+    assert cfg["style_prompt"] != ""
