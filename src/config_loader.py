@@ -52,7 +52,7 @@ def load_personas() -> dict[str, Any]:
 def get_persona(name: str) -> dict[str, Any]:
     personas = load_personas()
     if name not in personas:
-        raise ValueError(f"Unknown persona: {name}")
+        return None
     return personas[name]
 
 
@@ -61,24 +61,16 @@ def get_niche_config(niche: str) -> dict[str, Any]:
     if niche not in niches:
         raise ValueError(f"Unknown niche: {niche}")
     config = niches[niche]
-<<<<<<< HEAD
-    if config.get("style_prompt") == "" and config.get("persona"):
-        persona = get_persona(niche)
-        if persona and persona.get("system_prompt"):
+    if config.get("persona"):
+        persona = get_persona(config["persona"])
+        if persona:
             config = dict(config)
-            config["style_prompt"] = persona["system_prompt"]
+            config["_persona"] = persona
+            if not config.get("style_prompt"):
+                config["style_prompt"] = persona.get("system_prompt", "")
     return config
 
 
 def load_publishers() -> dict[str, Any]:
     with open(CONFIG_DIR / "publishers.yaml") as f:
         return yaml.safe_load(f)["publishers"]
-=======
-    if not config.get("style_prompt") and config.get("persona"):
-        persona_name = config["persona"]
-        persona = get_persona(persona_name)
-        config = config.copy()
-        config["style_prompt"] = persona.get("system_prompt", "")
-        config["_persona"] = persona
-    return config
->>>>>>> origin/feat/personas

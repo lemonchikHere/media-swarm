@@ -172,6 +172,6 @@ async def test_rewrite_uses_persona_system_prompt(rewriter, sample_post):
         mock_create.return_value = mock_response
         await rewriter.rewrite(sample_post, "", ["telegram"], {"system_prompt": persona_system_prompt})
         
-        call_kwargs = mock_create.call_args.kwargs
+        call_kwargs = mock_create.call_args_list[0].kwargs
         messages = call_kwargs["messages"]
         assert persona_system_prompt in messages[0]["content"]

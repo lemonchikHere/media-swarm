@@ -48,7 +48,7 @@ class AIRewriter:
             )
             text = resp.choices[0].message.content or ""
             text = text.strip()
-            if persona and persona.get("humanize"):
+            if persona and persona.get("humanize", True):
                 text = await self._humanize(text)
             variants[platform] = text
 
