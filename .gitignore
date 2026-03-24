@@ -3,8 +3,10 @@ __pycache__/
 *.pyc
 *.pyo
 .env
+.env.tg_creds
 .pytest_cache/
 *.egg-info/
 dist/
 build/
 .DS_Store
+data/

@@ -5,6 +5,12 @@ from src.models import RawPost, ProcessedPost
 from datetime import datetime, timezone
 
 
+async def _empty_async_gen(*args, **kwargs):
+    return
+    yield  # noqa: unreachable — makes this an async generator
+
+
+
 @pytest.fixture
 def mock_collector_posts():
     post1 = RawPost(
@@ -80,12 +86,18 @@ def test_pipeline_run_full_flow(mock_collector_posts):
         patch("src.pipeline.SemanticDeduplicator", return_value=mock_dedup),
         patch("src.pipeline.AIRewriter", return_value=mock_rewriter),
         patch("src.pipeline.TelegramPublisher", return_value=mock_tg),
+        patch("src.pipeline.TelegramCollector", return_value=MagicMock(collect=_empty_async_gen)),
         patch("src.pipeline.VKPublisher", return_value=mock_vk),
+        patch("src.pipeline.is_seen", return_value=False),
+        patch("src.pipeline.mark_seen"),
         patch.dict("os.environ", {
             "OPENAI_API_KEY": "test-key",
             "TG_BOT_TOKEN": "test-tg",
             "VK_TOKEN": "test-vk",
             "REDIS_URL": "redis://localhost:6380",
+            "TG_API_ID": "12345",
+            "TG_API_HASH": "testhash",
+            "TG_SESSION_STRING": "teststring",
         }),
     ):
         pipeline = Pipeline("realestate")
@@ -111,12 +123,18 @@ def test_pipeline_skips_duplicates_when_duplicate(mock_collector_posts):
         patch("src.pipeline.SemanticDeduplicator", return_value=mock_dedup),
         patch("src.pipeline.AIRewriter", return_value=mock_rewriter),
         patch("src.pipeline.TelegramPublisher", return_value=mock_tg),
+        patch("src.pipeline.TelegramCollector", return_value=MagicMock(collect=_empty_async_gen)),
         patch("src.pipeline.VKPublisher", return_value=mock_vk),
+        patch("src.pipeline.is_seen", return_value=False),
+        patch("src.pipeline.mark_seen"),
         patch.dict("os.environ", {
             "OPENAI_API_KEY": "test-key",
             "TG_BOT_TOKEN": "test-tg",
             "VK_TOKEN": "test-vk",
             "REDIS_URL": "redis://localhost:6380",
+            "TG_API_ID": "12345",
+            "TG_API_HASH": "testhash",
+            "TG_SESSION_STRING": "teststring",
         }),
     ):
         pipeline = Pipeline("realestate")
@@ -139,12 +157,18 @@ def test_pipeline_respects_max_posts(mock_collector_posts):
         patch("src.pipeline.SemanticDeduplicator", return_value=mock_dedup),
         patch("src.pipeline.AIRewriter", return_value=mock_rewriter),
         patch("src.pipeline.TelegramPublisher", return_value=mock_tg),
+        patch("src.pipeline.TelegramCollector", return_value=MagicMock(collect=_empty_async_gen)),
         patch("src.pipeline.VKPublisher", return_value=mock_vk),
+        patch("src.pipeline.is_seen", return_value=False),
+        patch("src.pipeline.mark_seen"),
         patch.dict("os.environ", {
             "OPENAI_API_KEY": "test-key",
             "TG_BOT_TOKEN": "test-tg",
             "VK_TOKEN": "test-vk",
             "REDIS_URL": "redis://localhost:6380",
+            "TG_API_ID": "12345",
+            "TG_API_HASH": "testhash",
+            "TG_SESSION_STRING": "teststring",
         }),
     ):
         pipeline = Pipeline("realestate")
@@ -165,12 +189,18 @@ def test_pipeline_loads_niche_config():
         patch("src.pipeline.SemanticDeduplicator", return_value=mock_dedup),
         patch("src.pipeline.AIRewriter", return_value=mock_rewriter),
         patch("src.pipeline.TelegramPublisher", return_value=mock_tg),
+        patch("src.pipeline.TelegramCollector", return_value=MagicMock(collect=_empty_async_gen)),
         patch("src.pipeline.VKPublisher", return_value=mock_vk),
+        patch("src.pipeline.is_seen", return_value=False),
+        patch("src.pipeline.mark_seen"),
         patch.dict("os.environ", {
             "OPENAI_API_KEY": "test-key",
             "TG_BOT_TOKEN": "test-tg",
             "VK_TOKEN": "test-vk",
             "REDIS_URL": "redis://localhost:6380",
+            "TG_API_ID": "12345",
+            "TG_API_HASH": "testhash",
+            "TG_SESSION_STRING": "teststring",
         }),
     ):
         pipeline = Pipeline("realestate")
