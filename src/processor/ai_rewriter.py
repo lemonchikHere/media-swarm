@@ -1,16 +1,19 @@
 import re
+from typing import Any
 from openai import AsyncOpenAI
+from openai.types.responses import ResponseFunctionToolCall
 from src.models import RawPost, ProcessedPost
 
-HUMANIZER_PROMPT = """Review this Russian Telegram post and remove ANY of these AI writing patterns:
-- Words: революционный, ключевой, стоит отметить, примечательно, раскрывает, демонстрирует, раскрыл потенциал
-- Pattern: Это не просто X, это Y
-- Pattern: Not X, but Y (negative parallelism)
-- Triple enumerations that feel formulaic
-- Em dash overuse (more than 2 per post)
-- Vague attributions (эксперты считают, исследования показывают)
-- Significance inflation (революционный момент, знаковое событие)
-Rewrite naturally preserving the author voice. Return only the improved text."""
+
+HUMANIZER_PROMPT = """Ты редактор, который делает текст более человечным и естественным.
+Убери типичные AI-паттерны:
+- Не используй штампы вроде "революционный", "ключевой", "прорывной", "инновационный"
+- Избегай фраз "в заключение", "подводя итоги", "таким образом"
+- Не используй чрезмерно формальный язык
+- Добавляй конкретику и примеры
+- Пиши как живой человек в Telegram
+
+Перепиши этот текст более естественно:"""
 
 
 class AIRewriter:
@@ -22,35 +25,31 @@ class AIRewriter:
         post: RawPost,
         style_prompt: str,
         platforms: list[str],
-        persona: dict = None,
+        persona: dict | None = None,
     ) -> ProcessedPost:
-        if persona is None:
-            persona = {}
         model = "gpt-4o-mini"
-        system_message = style_prompt
-
         if persona:
-            model = persona.get("model", "gpt-4o-mini")
-            system_message = persona.get("system_prompt", style_prompt)
+            model = persona.get("model", "gpt-4o-mini") or "gpt-4o-mini"
+        if not style_prompt and persona:
+            style_prompt = persona.get("system_prompt", "") or ""
 
         variants = {}
         for platform in platforms:
             platform_hint = self._platform_hint(platform)
             messages = [
-                {"role": "system", "content": system_message + f"\n\nПлатформа: {platform_hint}"},
+                {"role": "system", "content": style_prompt + f"\n\nПлатформа: {platform_hint}"},
                 {"role": "user", "content": f"Исходный материал:\n\n{post.text[:3000]}"}
             ]
             resp = await self.client.chat.completions.create(
                 model=model,
-                messages=messages,
+                messages=messages,  # type: ignore[arg-type]
                 max_tokens=800,
                 temperature=0.7,
             )
-            text = resp.choices[0].message.content.strip()
-
-            if persona:
+            text = resp.choices[0].message.content or ""
+            text = text.strip()
+            if persona and persona.get("humanize"):
                 text = await self._humanize(text)
-
             variants[platform] = text
 
         first_line = variants.get("telegram", "").split("\n")[0]
@@ -71,11 +70,11 @@ class AIRewriter:
         ]
         resp = await self.client.chat.completions.create(
             model="gpt-4o-mini",
-            messages=messages,
-            max_tokens=1000,
-            temperature=0.3,
+            messages=messages,  # type: ignore[arg-type]
+            max_tokens=800,
+            temperature=0.5,
         )
-        return resp.choices[0].message.content.strip()
+        return (resp.choices[0].message.content or "").strip()
 
     def _platform_hint(self, platform: str) -> str:
         hints = {

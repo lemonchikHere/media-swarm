@@ -57,8 +57,13 @@ class Pipeline:
                 continue
 
             platforms = list(self.config["publish_to"].keys())
+            persona = self.config.get("_persona")
             processed = await self.rewriter.rewrite(
+<<<<<<< HEAD
                 post, self.config["style_prompt"], platforms, self.persona
+=======
+                post, self.config["style_prompt"], platforms, persona
+>>>>>>> origin/feat/personas
             )
 
             for platform, channels in self.config["publish_to"].items():
