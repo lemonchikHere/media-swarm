@@ -12,8 +12,8 @@ niches:
         - realty_channel_1
         - realty_rbc
       rss:
-        - https://realty.rbc.ru/rss/
-        - https://www.cian.ru/rss/news/
+        - https://www.mirkvartir.ru/rss/news/
+        - https://www.vedomosti.ru/rss/articles
     publish_to:
       telegram:
         - channel_id: "@my_realestate"
@@ -36,8 +36,15 @@ niches:
         - ai_news_ru
         - openai_news
       rss:
+        # Russian
         - https://habr.com/ru/rss/hubs/artificial_intelligence/articles/
+        - https://cnews.ru/inc/rss/news.xml
+        # Western
+        - https://feeds.feedburner.com/venturebeat/SZYF
         - https://techcrunch.com/feed/
+        - https://www.technologyreview.com/feed/
+        - https://feeds.arstechnica.com/arstechnica/index
+        - https://openai.com/news/rss.xml
     publish_to:
       telegram:
         - channel_id: "@my_aitech"
