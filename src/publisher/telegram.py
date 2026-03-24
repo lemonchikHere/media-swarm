@@ -1,6 +1,9 @@
+import os
 import httpx
 from src.models import ProcessedPost
 from src.publisher.base import BasePublisher
+
+DRY_RUN = os.getenv("DRY_RUN", "").lower() in ("1", "true", "yes")
 
 
 class TelegramPublisher(BasePublisher):
@@ -10,6 +13,9 @@ class TelegramPublisher(BasePublisher):
 
     async def publish(self, post: ProcessedPost, channel_id: str) -> bool:
         text = post.platform_variants.get("telegram", post.body)
+        if DRY_RUN:
+            print(f"[DRY_RUN][Telegram] → {channel_id}: {text[:120]}...")
+            return True
         async with httpx.AsyncClient() as client:
             resp = await client.post(
                 f"{self.base_url}/sendMessage",
